@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sanjeevni – Supplements</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --green:#1f7a5c;
+  --green2:#2fb48f;
+  --bg:#f4fbf8;
+  --card:#ffffff;
+  --danger:#ff5a5a;
+  --radius:20px;
+  --text:#0f3d2e;
+  --muted:#5f8f7f;
+}
+
+*{box-sizing:border-box;font-family:Segoe UI,system-ui,sans-serif}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#eef9f4,#f4fbf8);
+  color:var(--text);
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+  background:#fff;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.logo{
+  font-weight:900;
+  font-size:22px;
+  color:var(--green);
+}
+.search{flex:1;}
+.search input{
+  width:100%;
+  padding:12px 18px;
+  border-radius:999px;
+  border:1px solid #cfe6dd;
+  outline:none;
+  font-size:14px;
+}
+.nav-links a{
+  margin:0 8px;
+  color:#2c6b57;
+  text-decoration:none;
+  font-weight:700;
+}
+.nav-links a.active{
+  color:var(--green);
+  border-bottom:3px solid var(--green2);
+  padding-bottom:4px;
+}
+
+/* Cart */
+.cart{
+  position:relative;
+  font-size:15px;
+  cursor:pointer;
+  background:#e9f7f1;
+  padding:8px 14px;
+  border-radius:999px;
+  font-weight:900;
+}
+.cart-badge{
+  position:absolute;
+  top:-6px;
+  right:-10px;
+  background:var(--danger);
+  color:#fff;
+  border-radius:999px;
+  padding:2px 7px;
+  font-size:12px;
+  font-weight:900;
+}
+
+/* ===== PAGE ===== */
+.container{max-width:1200px;margin:28px auto;padding:0 16px}
+h1{margin-bottom:6px}
+.subtitle{color:var(--muted);margin-bottom:24px}
+
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:22px;
+}
+
+/* Card */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  transition:.25s;
+  text-align:center;
+}
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 14px 28px rgba(0,0,0,.12);
+}
+
+.card img{
+  width:90px;
+  height:90px;
+  object-fit:contain;
+  margin:0 auto 6px;
+}
+
+.name{
+  font-weight:900;
+  font-size:16px;
+}
+
+.category{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+}
+
+.desc{
+  font-size:13px;
+  color:#4f8f7a;
+  line-height:1.4;
+  min-height:36px;
+}
+
+.price{
+  color:var(--green);
+  font-weight:900;
+  font-size:16px;
+}
+
+/* Qty */
+.qty{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:8px;
+  background:#f3fbf7;
+  border-radius:12px;
+  padding:6px 10px;
+}
+.qty button{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  border:none;
+  background:var(--green);
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+  font-weight:900;
+}
+.qty span{
+  min-width:24px;
+  text-align:center;
+  font-weight:900;
+  font-size:16px;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">🌸 Sanjeevni</div>
+
+  <div class="search">
+    <input id="searchInput" placeholder="Search supplements..." oninput="renderSupplements()">
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="medicine.html">Medicines</a>
+    <a href="labtest.html">Lab Tests</a>
+    <a href="appointments.html">Appointments</a>
+    <a class="active" href="supp.html">Supplements</a>
+    <a href="reports.html">Reports</a>
+    <a href="track.html">Track Health</a>
+  </div>
+
+  <div class="cart" onclick="goCart()">
+    🛒 Cart <span class="cart-badge" id="cartCount">0</span>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+  <h1>Health Supplements</h1>
+  <div class="subtitle">Vitamins, proteins, minerals & wellness products for daily health</div>
+
+  <div class="grid" id="suppGrid"></div>
+</div>
+
+<script>
+/* Category images */
+const images = {
+  "Protein":"https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
+  "Vitamin":"https://cdn-icons-png.flaticon.com/512/2913/2913465.png",
+  "Mineral":"https://cdn-icons-png.flaticon.com/512/3004/3004458.png",
+  "Herbal":"https://cdn-icons-png.flaticon.com/512/2909/2909764.png",
+  "Digestive":"https://cdn-icons-png.flaticon.com/512/3075/3075977.png",
+  "Joint":"https://cdn-icons-png.flaticon.com/512/2966/2966484.png",
+  "Brain":"https://cdn-icons-png.flaticon.com/512/4320/4320341.png",
+  "Wellness":"https://cdn-icons-png.flaticon.com/512/4320/4320337.png",
+  "Energy":"https://cdn-icons-png.flaticon.com/512/1046/1046786.png",
+  "Weight Loss":"https://cdn-icons-png.flaticon.com/512/4320/4320457.png"
+};
+
+/* Supplements with descriptions */
+const supplements = [
+  ["Whey Protein","Protein",1999,"Supports muscle growth and faster recovery after workouts."],
+  ["Plant Protein","Protein",1799,"Easy to digest protein for daily strength and endurance."],
+  ["Mass Gainer","Protein",2199,"Helps increase weight and build lean muscle mass."],
+  ["Multivitamin","Vitamin",499,"Daily essential vitamins for overall health and immunity."],
+  ["Vitamin D3","Vitamin",399,"Supports bone strength and improves calcium absorption."],
+  ["Vitamin B12","Vitamin",349,"Boosts energy levels and supports nerve health."],
+  ["Calcium + D3","Mineral",399,"Strengthens bones and teeth, prevents deficiency."],
+  ["Magnesium","Mineral",349,"Helps muscle relaxation and improves sleep quality."],
+  ["Zinc","Mineral",299,"Improves immunity and supports skin health."],
+  ["Iron","Mineral",249,"Helps fight anemia and improves oxygen circulation."],
+  ["Probiotics","Digestive",599,"Improves gut health and digestion naturally."],
+  ["Digestive Enzymes","Digestive",499,"Helps in better digestion and nutrient absorption."],
+  ["Ashwagandha","Herbal",499,"Reduces stress and improves stamina naturally."],
+  ["Ginseng","Herbal",799,"Boosts energy and supports mental performance."],
+  ["Turmeric Curcumin","Herbal",399,"Powerful anti-inflammatory and antioxidant support."],
+  ["Joint Support","Joint",699,"Supports joint flexibility and reduces stiffness."],
+  ["Glucosamine","Joint",599,"Helps maintain healthy cartilage and joints."],
+  ["Memory Booster","Brain",799,"Improves focus, memory and mental clarity."],
+  ["Sleep Aid","Wellness",499,"Promotes deep and restful sleep naturally."],
+  ["Immunity Booster","Wellness",599,"Strengthens immune system and overall resistance."],
+  ["Energy Drink Mix","Energy",349,"Instant energy boost for daily activities."],
+  ["Green Tea Extract","Weight Loss",499,"Supports fat burning and metabolism naturally."]
+];
+
+/* ===== SHARED CART ===== */
+let cart = JSON.parse(localStorage.getItem("sanjeevni_cart")) || {};
+
+function saveCart(){
+  localStorage.setItem("sanjeevni_cart", JSON.stringify(cart));
+}
+
+function updateCartCount(){
+  let total = 0;
+  for(let k in cart) total += cart[k].qty;
+  const badge = document.getElementById("cartCount");
+  badge.innerText = total;
+  badge.style.display = total > 0 ? "inline-block" : "none";
+}
+
+function changeQtyByIndex(i, delta){
+  const s = supplements[i];
+  const id = "sup-" + i;
+
+  if(!cart[id]){
+    cart[id] = { name: s[0], price: s[2], qty: 0 };
+  }
+
+  cart[id].qty += delta;
+
+  if(cart[id].qty <= 0){
+    delete cart[id];
+  }
+
+  saveCart();
+  updateCartCount();
+  renderSupplements();
+}
+
+function goCart(){
+  window.location.href = "billing.html";
+}
+
+/* Render */
+function renderSupplements(){
+  const grid = document.getElementById("suppGrid");
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  grid.innerHTML = "";
+
+  supplements.forEach((s,i)=>{
+    const name = s[0], cat = s[1], price = s[2], desc = s[3];
+    if(q && !name.toLowerCase().includes(q) && !cat.toLowerCase().includes(q)) return;
+
+    const id = "sup-" + i;
+    const qty = cart[id] ? cart[id].qty : 0;
+    const img = images[cat] || images["Wellness"];
+
+    grid.innerHTML += `
+      <div class="card">
+        <img src="${img}" alt="Supplement">
+        <div class="name">${name}</div>
+        <div class="category">${cat}</div>
+        <div class="desc">${desc}</div>
+        <div class="price">₹${price}</div>
+        <div class="qty">
+          <button onclick="changeQtyByIndex(${i}, -1)">−</button>
+          <span>${qty}</span>
+          <button onclick="changeQtyByIndex(${i}, 1)">+</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* INIT */
+renderSupplements();
+updateCartCount();
+</script>
+
+</body>
+</html>

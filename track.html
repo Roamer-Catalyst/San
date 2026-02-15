@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sanjeevni – Track Health</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --green:#1f7a5c;
+  --green2:#2fb48f;
+  --bg:#f4fbf8;
+  --card:#ffffff;
+  --radius:18px;
+  --text:#0f3d2e;
+  --muted:#5f8f7f;
+}
+
+*{box-sizing:border-box;font-family:Segoe UI,system-ui,sans-serif}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#eef9f4,#f4fbf8);
+  color:var(--text);
+}
+
+/* Navbar */
+.navbar{
+  background:#fff;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.logo{
+  font-weight:900;
+  font-size:22px;
+  color:var(--green);
+}
+.search{flex:1;}
+.search input{
+  width:100%;
+  padding:12px 16px;
+  border-radius:999px;
+  border:1px solid #cfe6dd;
+  outline:none;
+}
+.nav-links a{
+  margin:0 8px;
+  color:#2c6b57;
+  text-decoration:none;
+  font-weight:700;
+}
+.nav-links a.active{
+  color:var(--green);
+  border-bottom:3px solid var(--green2);
+  padding-bottom:4px;
+}
+
+/* Layout */
+.container{max-width:1200px;margin:28px auto;padding:0 16px}
+h1{margin-bottom:6px}
+.subtitle{color:var(--muted);margin-bottom:24px}
+
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:20px;
+}
+
+/* Card */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.card h3{margin:0}
+.value{
+  font-size:20px;
+  font-weight:900;
+  color:var(--green);
+}
+
+/* Inputs */
+input{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  outline:none;
+}
+button{
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#2fb48f,#1f7a5c);
+  color:white;
+  font-weight:900;
+  cursor:pointer;
+}
+button:hover{opacity:0.9}
+
+.small{font-size:12px;color:#666}
+
+/* Canvas */
+canvas{
+  width:100%;
+  height:160px;
+  background:#f6fcf9;
+  border-radius:12px;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">🌸 Sanjeevni</div>
+
+  <div class="search">
+    <input placeholder="Search health records (demo)">
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="medicine.html">Medicines</a>
+    <a href="labtest.html">Lab Tests</a>
+    <a href="appointments.html">Appointments</a>
+    <a href="supp.html">Supplements</a>
+    <a href="reports.html">Reports</a>
+    <a class="active" href="track.html">Track Health</a>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+  <h1>Track Your Health</h1>
+  <div class="subtitle">Monitor trends of your daily vitals over time</div>
+
+  <div class="grid">
+
+    <!-- Blood Pressure -->
+    <div class="card">
+      <h3>Blood Pressure</h3>
+      <div class="value" id="bpValue">-- / -- mmHg</div>
+      <input id="bpSys" type="number" placeholder="Systolic (e.g. 120)">
+      <input id="bpDia" type="number" placeholder="Diastolic (e.g. 80)">
+      <button onclick="saveBP()">Save</button>
+      <canvas id="bpChart"></canvas>
+    </div>
+
+    <!-- Blood Sugar -->
+    <div class="card">
+      <h3>Blood Sugar</h3>
+      <div class="value" id="sugarValue">-- mg/dL</div>
+      <input id="sugarInput" type="number" placeholder="e.g. 95">
+      <button onclick="saveSugar()">Save</button>
+      <canvas id="sugarChart"></canvas>
+    </div>
+
+    <!-- Weight -->
+    <div class="card">
+      <h3>Weight & BMI</h3>
+      <div class="value" id="weightValue">-- kg (BMI --)</div>
+      <input id="weightInput" type="number" placeholder="Weight (kg)">
+      <input id="heightInput" type="number" placeholder="Height (cm)">
+      <button onclick="saveWeight()">Save</button>
+      <canvas id="weightChart"></canvas>
+    </div>
+
+    <!-- Heart Rate -->
+    <div class="card">
+      <h3>Heart Rate</h3>
+      <div class="value" id="heartValue">-- bpm</div>
+      <input id="heartInput" type="number" placeholder="e.g. 72">
+      <button onclick="saveHeart()">Save</button>
+      <canvas id="heartChart"></canvas>
+    </div>
+
+    <!-- Oxygen -->
+    <div class="card">
+      <h3>Oxygen (SpO₂)</h3>
+      <div class="value" id="oxyValue">-- %</div>
+      <input id="oxyInput" type="number" placeholder="e.g. 98">
+      <button onclick="saveOxy()">Save</button>
+      <canvas id="oxyChart"></canvas>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* Utility to draw simple line chart */
+function drawChart(canvasId, data, color="#1f7a5c"){
+  const c = document.getElementById(canvasId);
+  const ctx = c.getContext("2d");
+  c.width = c.clientWidth;
+  c.height = c.clientHeight;
+
+  ctx.clearRect(0,0,c.width,c.height);
+
+  if(data.length < 2) return;
+
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const pad = 10;
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+
+  data.forEach((v,i)=>{
+    const x = (i/(data.length-1)) * (c.width - 20) + 10;
+    const y = c.height - ((v - min)/(max - min || 1)) * (c.height - 20) - 10;
+    if(i===0) ctx.moveTo(x,y);
+    else ctx.lineTo(x,y);
+  });
+
+  ctx.stroke();
+}
+
+/* Load history */
+let bpHistory = JSON.parse(localStorage.getItem("health_bp_hist")) || [];
+let sugarHistory = JSON.parse(localStorage.getItem("health_sugar_hist")) || [];
+let weightHistory = JSON.parse(localStorage.getItem("health_weight_hist")) || [];
+let heartHistory = JSON.parse(localStorage.getItem("health_heart_hist")) || [];
+let oxyHistory = JSON.parse(localStorage.getItem("health_oxy_hist")) || [];
+
+/* Initial render */
+function refreshAll(){
+  if(bpHistory.length){
+    const last = bpHistory[bpHistory.length-1];
+    document.getElementById("bpValue").innerText = last.sys+" / "+last.dia+" mmHg";
+    drawChart("bpChart", bpHistory.map(v=>v.sys));
+  }
+  if(sugarHistory.length){
+    const last = sugarHistory[sugarHistory.length-1];
+    document.getElementById("sugarValue").innerText = last+" mg/dL";
+    drawChart("sugarChart", sugarHistory);
+  }
+  if(weightHistory.length){
+    const last = weightHistory[weightHistory.length-1];
+    document.getElementById("weightValue").innerText = last.w+" kg (BMI "+last.bmi+")";
+    drawChart("weightChart", weightHistory.map(v=>v.w));
+  }
+  if(heartHistory.length){
+    const last = heartHistory[heartHistory.length-1];
+    document.getElementById("heartValue").innerText = last+" bpm";
+    drawChart("heartChart", heartHistory);
+  }
+  if(oxyHistory.length){
+    const last = oxyHistory[oxyHistory.length-1];
+    document.getElementById("oxyValue").innerText = last+" %";
+    drawChart("oxyChart", oxyHistory);
+  }
+}
+
+/* Save functions */
+function saveBP(){
+  const sys = +bpSys.value, dia = +bpDia.value;
+  if(!sys || !dia) return alert("Enter both values");
+  bpHistory.push({sys,dia});
+  localStorage.setItem("health_bp_hist", JSON.stringify(bpHistory));
+  refreshAll();
+}
+
+function saveSugar(){
+  const v = +sugarInput.value;
+  if(!v) return alert("Enter value");
+  sugarHistory.push(v);
+  localStorage.setItem("health_sugar_hist", JSON.stringify(sugarHistory));
+  refreshAll();
+}
+
+function saveWeight(){
+  const w = +weightInput.value, h = +heightInput.value;
+  if(!w || !h) return alert("Enter both values");
+  const bmi = (w / ((h/100)*(h/100))).toFixed(1);
+  weightHistory.push({w,bmi});
+  localStorage.setItem("health_weight_hist", JSON.stringify(weightHistory));
+  refreshAll();
+}
+
+function saveHeart(){
+  const v = +heartInput.value;
+  if(!v) return alert("Enter value");
+  heartHistory.push(v);
+  localStorage.setItem("health_heart_hist", JSON.stringify(heartHistory));
+  refreshAll();
+}
+
+function saveOxy(){
+  const v = +oxyInput.value;
+  if(!v) return alert("Enter value");
+  oxyHistory.push(v);
+  localStorage.setItem("health_oxy_hist", JSON.stringify(oxyHistory));
+  refreshAll();
+}
+
+/* Init */
+refreshAll();
+</script>
+
+</body>
+</html>

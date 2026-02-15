@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sanjeevni – Smart Healthcare</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;font-family:Inter,Segoe UI,system-ui,sans-serif}
+
+/* ✅ BACKGROUND COLOR REPLACED (LIKE YOUR SCREENSHOT) */
+body{
+  margin:0;
+  min-height:100vh;
+  color:#0f3d2e;
+  background: linear-gradient(180deg, #e8f6f0 0%, #f6fcf9 60%);
+}
+
+/* Header */
+.header{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 24px;
+  background:#ffffffcc;
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+.logo{font-weight:900;font-size:24px;color:#1f7a5c}
+.search{flex:1}
+.search input{
+  width:100%;height:44px;border-radius:999px;border:1px solid #cfe6dd;
+  padding:0 18px;outline:none;font-size:15px;
+}
+.profile-circle{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#2fb48f,#1f7a5c);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;cursor:pointer;color:white;
+}
+
+/* Tabs */
+.tabs{
+  display:flex;justify-content:center;gap:26px;padding:14px;
+  background:#ffffffaa;flex-wrap:wrap;
+  border-bottom:1px solid #dfeee8;
+}
+.tabs a{
+  color:#1f7a5c;text-decoration:none;font-weight:700;
+  opacity:.85;transition:.25s
+}
+.tabs a:hover{opacity:1;transform:translateY(-2px)}
+
+/* Layout */
+.container{max-width:1200px;margin:0 auto;padding:40px 20px}
+
+/* Hero */
+.hero{text-align:center;margin-top:20px}
+.hero h1{font-size:42px;margin-bottom:10px}
+.hero p{opacity:.9;font-size:18px}
+.hero .emergency{font-size:20px;font-weight:800;margin:18px 0}
+.btns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.btn{
+  padding:14px 32px;border-radius:999px;border:none;
+  font-weight:800;cursor:pointer;transition:.25s;font-size:16px
+}
+.btn:hover{transform:translateY(-3px) scale(1.06)}
+.btn-red{background:linear-gradient(135deg,#ff5a5a,#ff1744);color:white}
+.btn-green{background:linear-gradient(135deg,#2fb48f,#1f7a5c);color:white}
+
+/* Sections */
+.section{margin-top:70px}
+.section h2{text-align:center;margin-bottom:28px;font-size:30px}
+
+/* Cards */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:24px;
+}
+.card{
+  background:#ffffff;
+  border-radius:24px;
+  padding:18px;
+  transition:.3s;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  cursor:pointer;
+}
+.card:hover{
+  transform:translateY(-8px) scale(1.04);
+  box-shadow:0 16px 35px rgba(0,0,0,.12);
+}
+.card img{
+  width:80px;height:80px;object-fit:contain;margin-bottom:10px;
+}
+.card-title{font-weight:900;color:#1f7a5c}
+
+/* Footer */
+.footer{text-align:center;color:#2c6b57;margin:80px 0 30px;font-weight:600}
+
+/* Modal */
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);
+  display:none;align-items:center;justify-content:center;
+  z-index:2000;
+}
+.modal-box{
+  background:#ffffff;
+  color:#0f3d2e;
+  padding:24px;border-radius:20px;
+  width:100%;max-width:420px;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+.modal-box h3{margin-top:0;text-align:center;color:#1f7a5c}
+.modal-box input, .modal-box select, .modal-box textarea{
+  width:100%;padding:10px 12px;margin-bottom:10px;
+  border-radius:10px;border:1px solid #cfe6dd;outline:none;
+}
+.modal-box textarea{resize:none;height:70px}
+.modal-box button{
+  width:100%;padding:12px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,#2fb48f,#1f7a5c);
+  font-weight:900;cursor:pointer;margin-top:6px;color:white;
+}
+.close-btn{background:#ff1744 !important;color:white}
+
+/* Receipt */
+.receipt{
+  background:#f3fbf7;padding:16px;border-radius:12px;margin-top:10px
+}
+.receipt div{margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">🌿 SANJEEVNI</div>
+  <div class="search">
+    <input placeholder="Search medicines, tests, doctors..." 
+      onkeydown="if(event.key==='Enter')alert('Search coming soon 😄 Stay tuned!')">
+  </div>
+  <div class="profile-circle" onclick="alert('Profile panel coming soon!')">U</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <a href="#">Home</a>
+  <a href="labtest.html">Lab Tests</a>
+  <a href="medicine.html">Medicines</a>
+  <a href="appointments.html">Appointments</a>
+  <a href="supp.html">Supplements</a>
+  <a href="reports.html">Reports</a>
+  <a href="track.html">Track Health</a>
+</div>
+
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>🚀 Smart Digital Healthcare</h1>
+  <p>Medicines, Doctors, Tests & Emergency — All in One Platform</p>
+  <div class="emergency">📞 24/7 Emergency: 1800-123-4567</div>
+  <div class="btns">
+    <button class="btn btn-red" onclick="openEmergency()">Emergency Service</button>
+    <button class="btn btn-green" onclick="openMedicine()">Request Medicine</button>
+  </div>
+</div>
+
+<!-- TESTS -->
+<div class="section">
+  <h2>🧪 Popular Lab Tests</h2>
+  <div class="cards">
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/3004/3004458.png"><div class="card-title">Full Body Checkup</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png"><div class="card-title">Diabetes Profile</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/3050/3050525.png"><div class="card-title">Thyroid Test</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/1048/1048940.png"><div class="card-title">Heart Health</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png"><div class="card-title">Vitamin D</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/2913/2913465.png"><div class="card-title">Vitamin B12</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/4320/4320337.png"><div class="card-title">Liver Test</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/822/822143.png"><div class="card-title">Kidney Test</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387561.png"><div class="card-title">CBC Test</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/1048/1048940.png"><div class="card-title">Cholesterol</div></div>
+    <div class="card" onclick="go('labtest.html')"><img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png"><div class="card-title">Uric Acid</div></div>
+  </div>
+</div>
+
+<!-- DOCTORS -->
+<div class="section">
+  <h2>👨‍⚕️ Top Doctors</h2>
+  <div class="cards">
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387561.png"><div class="card-title">Cardiologist</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387569.png"><div class="card-title">Dermatologist</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387555.png"><div class="card-title">Orthopedic</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387543.png"><div class="card-title">Neurologist</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387567.png"><div class="card-title">Pediatrician</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387558.png"><div class="card-title">Gynecologist</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387561.png"><div class="card-title">ENT Specialist</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387569.png"><div class="card-title">Psychiatrist</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387555.png"><div class="card-title">Dentist</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387543.png"><div class="card-title">Physician</div></div>
+    <div class="card" onclick="go('appointments.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387567.png"><div class="card-title">Surgeon</div></div>
+  </div>
+</div>
+
+<!-- MEDICINES -->
+<div class="section">
+  <h2>💊 Popular Medicines</h2>
+  <div class="cards">
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/822/822143.png"><div class="card-title">Paracetamol</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/2913/2913465.png"><div class="card-title">Cough Syrup</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png"><div class="card-title">Vitamin Tablets</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/4320/4320337.png"><div class="card-title">Pain Relief</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/822/822119.png"><div class="card-title">Antibiotics</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png"><div class="card-title">BP Medicine</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/3004/3004458.png"><div class="card-title">Diabetes Medicine</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/1048/1048940.png"><div class="card-title">Heart Medicine</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/387/387561.png"><div class="card-title">Allergy Medicine</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png"><div class="card-title">Immunity Booster</div></div>
+    <div class="card" onclick="go('medicine.html')"><img src="https://cdn-icons-png.flaticon.com/512/2913/2913465.png"><div class="card-title">Cold & Flu</div></div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="section">
+  <h2>💬 What People Say</h2>
+  <div class="cards">
+    <div class="card"><div class="card-title">“Fast delivery & great UI!”</div></div>
+    <div class="card"><div class="card-title">“Booked test in 2 minutes”</div></div>
+    <div class="card"><div class="card-title">“Emergency helped my dad”</div></div>
+    <div class="card"><div class="card-title">“Best healthcare app”</div></div>
+    <div class="card"><div class="card-title">“Doctors are genuine”</div></div>
+    <div class="card"><div class="card-title">“Reports came on time”</div></div>
+    <div class="card"><div class="card-title">“Smooth experience”</div></div>
+    <div class="card"><div class="card-title">“Very reliable”</div></div>
+    <div class="card"><div class="card-title">“Love the design”</div></div>
+  </div>
+</div>
+
+<!-- HEALTH CORNER -->
+<div class="section">
+  <h2>🌿 Health Corner</h2>
+  <div class="cards">
+    <div class="card"><div class="card-title">Drink more water 💧</div></div>
+    <div class="card"><div class="card-title">Sleep 7–8 hours 😴</div></div>
+    <div class="card"><div class="card-title">Walk 30 min daily 🚶</div></div>
+    <div class="card"><div class="card-title">Eat fruits 🍎</div></div>
+    <div class="card"><div class="card-title">Laugh more 😄</div></div>
+    <div class="card"><div class="card-title">Less sugar 🍬❌</div></div>
+    <div class="card"><div class="card-title">Meditate 🧘</div></div>
+    <div class="card"><div class="card-title">Regular checkups 🩺</div></div>
+    <div class="card"><div class="card-title">Stay positive 🌟</div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">© 2026 Sanjeevni – Your Health, Our Priority</div>
+
+<!-- REQUEST MEDICINE MODAL -->
+<div class="modal" id="medicineModal">
+  <div class="modal-box">
+    <h3>Request Medicine</h3>
+    <input id="mName" placeholder="Name">
+    <input id="mAge" type="number" placeholder="Age">
+    <select id="mGender"><option>Male</option><option>Female</option><option>Other</option></select>
+    <input id="mMed" placeholder="Medicine Name">
+    <input id="mType" placeholder="Medicine Type">
+    <select id="mUrgency"><option>Normal</option><option>Urgent</option></select>
+    <textarea id="mLoc" placeholder="Location"></textarea>
+    <button onclick="submitMedicine()">Submit</button>
+    <button class="close-btn" onclick="closeMedicine()">Close</button>
+    <div id="medicineReceipt"></div>
+  </div>
+</div>
+
+<!-- EMERGENCY MODAL -->
+<div class="modal" id="emergencyModal">
+  <div class="modal-box">
+    <h3>Emergency Service</h3>
+    <input id="eName" placeholder="Name">
+    <input id="eAge" type="number" placeholder="Age">
+    <select id="eGender"><option>Male</option><option>Female</option><option>Other</option></select>
+    <input id="eProb" placeholder="Problem">
+    <textarea id="eLoc" placeholder="Location"></textarea>
+    <button onclick="submitEmergency()">Submit</button>
+    <button class="close-btn" onclick="closeEmergency()">Close</button>
+    <div id="emergencyReceipt"></div>
+  </div>
+</div>
+
+<script>
+function go(page){ window.location.href = page; }
+
+/* Medicine */
+function openMedicine(){ document.getElementById("medicineModal").style.display="flex"; }
+function closeMedicine(){ document.getElementById("medicineModal").style.display="none"; }
+function submitMedicine(){
+  const r = document.getElementById("medicineReceipt");
+  r.innerHTML = `<div class="receipt">
+    <div><b>Request Submitted!</b></div>
+    <div>Name: ${mName.value}</div>
+    <div>Medicine: ${mMed.value}</div>
+    <div>Urgency: ${mUrgency.value}</div>
+  </div>`;
+}
+
+/* Emergency */
+function openEmergency(){ document.getElementById("emergencyModal").style.display="flex"; }
+function closeEmergency(){ document.getElementById("emergencyModal").style.display="none"; }
+function submitEmergency(){
+  const r = document.getElementById("emergencyReceipt");
+  r.innerHTML = `<div class="receipt">
+    <div><b>Emergency Request Sent!</b></div>
+    <div>Name: ${eName.value}</div>
+    <div>Problem: ${eProb.value}</div>
+  </div>`;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sanjeevni – Secure Checkout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --green:#1f7a5c;
+  --green2:#2fb48f;
+  --bg:#f4fbf8;
+  --card:#ffffff;
+  --text:#0f3d2e;
+  --muted:#5f8f7f;
+  --danger:#ff5a5a;
+  --radius:18px;
+}
+*{box-sizing:border-box;font-family:Segoe UI,system-ui,sans-serif}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#eef9f4,#f4fbf8);
+  color:var(--text);
+}
+
+/* Header */
+.header{
+  background:#fff;
+  padding:14px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #ddd;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.logo{font-weight:900;font-size:22px;color:var(--green);}
+.back{font-weight:800;color:var(--green);text-decoration:none}
+
+/* Layout */
+.container{max-width:1100px;margin:30px auto;padding:0 20px}
+
+/* Sections */
+.section{
+  background:#fff;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+}
+.section h3{margin-top:0;margin-bottom:12px}
+
+/* Form */
+input, select, textarea{
+  width:100%;
+  padding:10px 12px;
+  margin-bottom:12px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+textarea{resize:none;height:70px}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #cfe6dd;padding:10px;text-align:center}
+th{background:#e9f7f1;font-weight:800}
+
+/* Buttons */
+.btn{
+  padding:10px 16px;border:none;border-radius:10px;
+  font-weight:800;cursor:pointer;font-size:14px;
+}
+.btn-green{background:linear-gradient(135deg,#2fb48f,#1f7a5c);color:white}
+.btn-red{background:#ff5a5a;color:white}
+.btn-gray{background:#ccc}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+
+/* Summary */
+.summary{
+  background:#f3fbf7;
+  padding:14px;
+  border-radius:14px;
+  margin-top:10px;
+}
+.summary div{display:flex;justify-content:space-between;margin-bottom:6px}
+.summary .grand{font-size:18px;font-weight:900;color:var(--green)}
+
+/* Receipt */
+.receipt{
+  background:#f6fcf9;
+  border-radius:12px;
+  padding:14px;
+}
+.receipt-item{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+.total-line{
+  margin-top:10px;
+  font-size:18px;
+  font-weight:900;
+  color:var(--green);
+}
+.empty{text-align:center;color:var(--muted);padding:20px}
+
+/* Appointment box */
+.appointment-box{
+  background:#f3fbf7;
+  padding:14px;
+  border-radius:14px;
+  display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">💚 Sanjeevni – Secure Checkout</div>
+  <a class="back" href="javascript:history.back()">← Back</a>
+</div>
+
+<div class="container">
+
+<!-- USER DETAILS -->
+<div class="section">
+  <h3>👤 User Details</h3>
+  <input id="uName" placeholder="Full Name">
+  <input id="uPhone" placeholder="Phone Number">
+  <textarea id="uAddress" placeholder="Full Address"></textarea>
+</div>
+
+<!-- CART -->
+<div class="section">
+  <h3>🛒 Your Cart</h3>
+  <div id="emptyCart" class="empty" style="display:none;">Your cart is empty.</div>
+
+  <table id="cartTable">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Total</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="cartBody"></tbody>
+  </table>
+
+  <div class="summary">
+    <div><span>Subtotal</span><span id="subTotal">₹0</span></div>
+    <div><span>GST (5%)</span><span id="gst">₹0</span></div>
+    <div><span>Delivery</span><span id="delivery">₹40</span></div>
+    <div><span>Discount</span><span id="discount">-₹0</span></div>
+    <div class="grand"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
+  </div>
+
+  <input id="coupon" placeholder="Coupon Code (Try: SAVE10)">
+  <button class="btn btn-gray" onclick="applyCoupon()">Apply Coupon</button>
+</div>
+
+<!-- APPOINTMENT DETAILS -->
+<div class="section appointment-box" id="appointmentBox">
+  <h3>🏥 Patient & Slot Details</h3>
+  <input id="pName" placeholder="Patient Name">
+  <input id="pAge" type="number" placeholder="Patient Age">
+  <select id="pGender">
+    <option>Male</option>
+    <option>Female</option>
+    <option>Other</option>
+  </select>
+  <select id="pSlot">
+    <option>10:00 AM - 11:00 AM</option>
+    <option>11:00 AM - 12:00 PM</option>
+    <option>2:00 PM - 3:00 PM</option>
+    <option>4:00 PM - 5:00 PM</option>
+  </select>
+</div>
+
+<!-- PAYMENT -->
+<div class="section">
+  <h3>💳 Payment Method</h3>
+  <select id="paymentMethod">
+    <option>UPI</option>
+    <option>Credit / Debit Card</option>
+    <option>Net Banking</option>
+    <option>Wallet</option>
+    <option>Cash on Delivery</option>
+  </select>
+
+  <div class="actions">
+    <button class="btn btn-green" onclick="payNow()">Pay Now</button>
+  </div>
+</div>
+
+<!-- RECEIPT -->
+<div class="section" id="receiptSection" style="display:none;">
+  <h3>🧾 Order Receipt</h3>
+  <div id="receiptContent" class="receipt"></div>
+  <div class="actions">
+    <button class="btn btn-green" onclick="window.print()">Print</button>
+    <button class="btn btn-gray" onclick="finish()">Done</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("sanjeevni_cart")) || {};
+let discountValue = 0;
+
+/* Render Cart */
+function renderCart(){
+  const body = document.getElementById("cartBody");
+  const empty = document.getElementById("emptyCart");
+  body.innerHTML = "";
+
+  let sub = 0;
+  let hasItems = false;
+  let hasAppointment = false;
+
+  for(let key in cart){
+    const item = cart[key];
+    if(item.qty <= 0) continue;
+    hasItems = true;
+    if(key.startsWith("appt-")) hasAppointment = true;
+
+    const total = item.qty * item.price;
+    sub += total;
+
+    body.innerHTML += `
+      <tr>
+        <td>${item.name}</td>
+        <td>
+          <button onclick="changeQty('${key}',-1)">−</button>
+          ${item.qty}
+          <button onclick="changeQty('${key}',1)">+</button>
+        </td>
+        <td>₹${item.price}</td>
+        <td>₹${total}</td>
+        <td><button class="btn btn-red" onclick="removeItem('${key}')">X</button></td>
+      </tr>
+    `;
+  }
+
+  if(!hasItems){
+    empty.style.display="block";
+    cartTable.style.display="none";
+    return;
+  }else{
+    empty.style.display="none";
+    cartTable.style.display="table";
+  }
+
+  if(hasAppointment){
+    document.getElementById("appointmentBox").style.display="block";
+  }
+
+  const gst = Math.round(sub * 0.05);
+  const delivery = sub > 0 ? 40 : 0;
+  const grand = sub + gst + delivery - discountValue;
+
+  subTotal.innerText = "₹" + sub;
+  gst.innerText = "₹" + gst;
+  delivery.innerText = "₹" + delivery;
+  discount.innerText = "-₹" + discountValue;
+  grandTotal.innerText = "₹" + grand;
+}
+
+function changeQty(key, delta){
+  cart[key].qty += delta;
+  if(cart[key].qty <= 0) delete cart[key];
+  saveCart();
+  renderCart();
+}
+
+function removeItem(key){
+  delete cart[key];
+  saveCart();
+  renderCart();
+}
+
+function saveCart(){
+  localStorage.setItem("sanjeevni_cart", JSON.stringify(cart));
+}
+
+function applyCoupon(){
+  const code = coupon.value.trim().toUpperCase();
+  if(code === "SAVE10"){
+    discountValue = 100;
+    alert("Coupon applied: ₹100 off");
+  }else{
+    discountValue = 0;
+    alert("Invalid coupon");
+  }
+  renderCart();
+}
+
+/* Pay */
+function payNow(){
+  if(!uName.value || !uPhone.value || !uAddress.value){
+    alert("Please fill user details");
+    return;
+  }
+
+  let receipt = `<div><b>Name:</b> ${uName.value}</div>
+                 <div><b>Phone:</b> ${uPhone.value}</div>
+                 <div><b>Payment:</b> ${paymentMethod.value}</div><hr>`;
+
+  for(let key in cart){
+    const item = cart[key];
+    if(item.qty>0){
+      receipt += `<div class="receipt-item">
+        <span>${item.name} x ${item.qty}</span>
+        <span>₹${item.qty * item.price}</span>
+      </div>`;
+    }
+  }
+
+  if(appointmentBox.style.display==="block"){
+    receipt += `<hr>
+    <div><b>Patient:</b> ${pName.value || "N/A"} (${pAge.value || "N/A"}, ${pGender.value})</div>
+    <div><b>Slot:</b> ${pSlot.value}</div>`;
+  }
+
+  receipt += `<div class="total-line">Total Paid: ${grandTotal.innerText}</div>`;
+
+  receiptContent.innerHTML = receipt;
+  receiptSection.style.display="block";
+
+  localStorage.removeItem("sanjeevni_cart");
+}
+
+/* Finish */
+function finish(){
+  alert("Thank you for using Sanjeevni!");
+  window.location.href="index.html";
+}
+
+/* Init */
+renderCart();
+</script>
+
+</body>
+</html>

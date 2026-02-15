@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sanjeevni – Reports</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --green:#1f7a5c;
+  --bg:#f4fbf8;
+  --card:#ffffff;
+  --danger:#ff5a5a;
+  --radius:16px;
+}
+*{box-sizing:border-box;font-family:Segoe UI,system-ui,sans-serif}
+body{margin:0;background:var(--bg);color:#0f3d2e}
+
+/* Navbar */
+.navbar{
+  background:#fff;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.logo{
+  font-weight:800;
+  font-size:22px;
+  color:var(--green);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.logo span{font-size:24px}
+.search{flex:1;}
+.search input{
+  width:100%;
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid #ddd;
+  outline:none;
+}
+.nav-links a{
+  margin:0 8px;
+  color:#2c6b57;
+  text-decoration:none;
+  font-weight:600;
+}
+.nav-links a.active{
+  color:var(--green);
+  border-bottom:2px solid var(--green);
+  padding-bottom:4px;
+}
+
+/* Page */
+.container{max-width:1200px;margin:24px auto;padding:0 16px}
+h1{margin-bottom:4px}
+.subtitle{color:#4f8b77;margin-bottom:24px}
+
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:20px;
+}
+
+/* Card */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.card img{
+  width:60px;
+  height:60px;
+  object-fit:contain;
+}
+.title{font-weight:700}
+.type{font-size:12px;color:#5f9c88}
+.date{font-size:12px;color:#777}
+.actions{
+  margin-top:auto;
+  display:flex;
+  gap:10px;
+}
+.actions button{
+  flex:1;
+  padding:8px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+.view-btn{
+  background:#e7f5f0;
+  color:var(--green);
+}
+.download-btn{
+  background:var(--green);
+  color:white;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo"><span>🌸</span> Sanjeevni</div>
+
+  <div class="search">
+    <input id="searchInput" placeholder="Search reports..." oninput="renderReports()">
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="medicine.html">Medicines</a>
+    <a href="labtests.html">Lab Tests</a>
+    <a href="appointments.html">Appointments</a>
+    <a href="supp.html">Supplements</a>
+    <a href="reports.html">Reports</a>
+    <a href="track.html">Track Health</a>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+  <h1>Your Reports</h1>
+  <div class="subtitle">View and download your medical records</div>
+
+  <div class="grid" id="reportGrid"></div>
+</div>
+
+<script>
+const reportIcon = "https://cdn-icons-png.flaticon.com/512/2991/2991148.png";
+
+/* 30+ SAMPLE REPORTS */
+const reports = [
+  ["Complete Blood Count (CBC)","Blood Test"],
+  ["Lipid Profile","Blood Test"],
+  ["Thyroid Profile","Hormone Test"],
+  ["Vitamin D Report","Vitamin Test"],
+  ["Vitamin B12 Report","Vitamin Test"],
+  ["HbA1c","Diabetes Test"],
+  ["Liver Function Test","Biochemistry"],
+  ["Kidney Function Test","Biochemistry"],
+  ["Urine Routine","Urine Test"],
+  ["CRP","Inflammation Test"],
+  ["ESR","Inflammation Test"],
+  ["Calcium Report","Mineral Test"],
+  ["Iron Studies","Mineral Test"],
+  ["Uric Acid","Metabolic Test"],
+  ["Electrolytes","Blood Test"],
+  ["COVID RT-PCR","Infection Test"],
+  ["Dengue NS1","Infection Test"],
+  ["Malaria Report","Infection Test"],
+  ["Pregnancy Test","Hormone Test"],
+  ["PSA","Cancer Marker"],
+  ["Prolactin","Hormone Test"],
+  ["Testosterone","Hormone Test"],
+  ["Estrogen","Hormone Test"],
+  ["Full Body Checkup","Package"],
+  ["Cardiac Risk Profile","Heart Test"],
+  ["Ferritin","Iron Test"],
+  ["Stool Test","Stool Test"],
+  ["Hepatitis B","Virus Test"],
+  ["Hepatitis C","Virus Test"],
+  ["HIV","Virus Test"],
+  ["Troponin I","Heart Test"],
+  ["D-Dimer","Clotting Test"],
+  ["PT INR","Clotting Test"],
+  ["Blood Group","Basic Test"],
+  ["Rheumatoid Factor","Autoimmune Test"]
+];
+
+function randomDate(){
+  const d = new Date(Date.now() - Math.random()*1000*60*60*24*180);
+  return d.toLocaleDateString();
+}
+
+function renderReports(){
+  const grid = document.getElementById("reportGrid");
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  grid.innerHTML = "";
+
+  reports.forEach((r,i)=>{
+    const name = r[0];
+    const type = r[1];
+    if(!name.toLowerCase().includes(q) && !type.toLowerCase().includes(q)) return;
+
+    grid.innerHTML += `
+      <div class="card">
+        <img src="${reportIcon}" alt="Report">
+        <div class="title">${name}</div>
+        <div class="type">${type}</div>
+        <div class="date">Date: ${randomDate()}</div>
+        <div class="actions">
+          <button class="view-btn" onclick="viewReport('${name}')">View</button>
+          <button class="download-btn" onclick="downloadReport('${name}')">Download</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function viewReport(name){
+  alert("Opening report: " + name);
+}
+
+function downloadReport(name){
+  alert("Downloading report: " + name);
+}
+
+/* INIT */
+renderReports();
+</script>
+
+</body>
+</html>
